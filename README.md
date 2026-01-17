@@ -188,14 +188,6 @@ The generated executable will be located in the `dist/` folder.
 
 ---
 
-## Notes
-
-* The `.exe` file **should NOT be uploaded to GitHub**.
-* Only source code, configuration files, and documentation should be committed.
-* Use GitHub Releases or external storage if you want to distribute the executable.
-
----
-
 ## License & Usage
 
 This project is intended for:
