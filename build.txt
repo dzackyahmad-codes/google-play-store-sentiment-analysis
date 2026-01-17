@@ -1,0 +1,5 @@
+web app : 
+pyinstaller --onefile --name SentimentAI --add-data "api;api" --add-data "analysis;analysis" --add-data "scraper;scraper" --hidden-import fastapi --hidden-import fastapi.staticfiles --hidden-import uvicorn --hidden-import sklearn --hidden-import sklearn.feature_extraction.text --hidden-import torch --hidden-import transformers --hidden-import google_play_scraper --hidden-import google_play_scraper.reviews --hidden-import google_play_scraper.constants run_app.py
+
+desktop app : 
+pyinstaller --noconfirm --onefile --name SentimentAI --add-data "api;api" --add-data "analysis;analysis" --add-data "scraper;scraper" --add-data "data;data" --hidden-import fastapi --hidden-import uvicorn --hidden-import sklearn --hidden-import torch --hidden-import transformers --hidden-import google_play_scraper desktop_app.py

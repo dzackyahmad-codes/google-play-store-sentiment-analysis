@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual Environment
+venv/
+.env/
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Data (Generated)
+data/raw/
+data/processed/
+data/insight/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Executables
+*.exe
+
+# Temporary
+*.tmp
+*.bak

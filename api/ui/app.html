@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sentiment Analysis Platform</title>
+
+  <!-- Poppins Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/ui/style.css" />
+  <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+  <aside class="sidebar">
+    <h2>Sentiment AI</h2>
+    <ul>
+      <li class="active" onclick="showPage('playstore', this)">Google Play</li>
+      <li onclick="showPage('manual', this)">Manual Input</li>
+    </ul>
+  </aside>
+
+
+  <!-- MAIN -->
+    <main class="main">
+
+    <section id="playstore-page">
+
+    <header class="header">
+      <h1>Sentiment Analysis</h1>
+      <p>Google Play Reviews</p>
+    </header>
+
+    <!-- INPUT -->
+    <section class="input-card fade-in">
+      <input
+      id="appId"
+      list="appList"
+      placeholder="Pilih atau ketik App ID (contoh: com.shopee.id)"
+    />
+
+    <datalist id="appList">
+      <!-- E-COMMERCE -->
+      <option value="com.shopee.id">Shopee Indonesia</option>
+      <option value="com.tokopedia.tkpd">Tokopedia</option>
+      <option value="com.bukalapak.android">Bukalapak</option>
+      <option value="blibli.mobile.commerce">Blibli</option>
+      <option value="com.lazada.android">Lazada</option>
+      <option value="com.alibaba.aliexpresshd">AliExpress</option>
+      <option value="com.olx.southeastasia">OLX Indonesia</option>
+      <option value="com.zalora.android">Zalora</option>
+
+      <!-- TRANSPORT & DELIVERY -->
+      <option value="com.gojek.app">Gojek</option>
+      <option value="com.grabtaxi.passenger">Grab</option>
+      <option value="com.shopeefood">ShopeeFood</option>
+      <option value="com.gojek.gobox">GoBox</option>
+      <option value="com.lalamove.driver">Lalamove</option>
+
+      <!-- TRAVEL -->
+      <option value="com.traveloka.android">Traveloka</option>
+      <option value="com.tiket.gits">Tiket.com</option>
+      <option value="com.airbnb.android">Airbnb</option>
+      <option value="com.booking">Booking.com</option>
+      <option value="com.pegipegi.android">Pegipegi</option>
+
+      <!-- FINTECH / E-WALLET -->
+      <option value="ovo.id">OVO</option>
+      <option value="id.dana">DANA</option>
+      <option value="com.gojek.gopay">GoPay</option>
+      <option value="com.shopeepay.id">ShopeePay</option>
+      <option value="com.telkomsel.mytsel">MyTelkomsel</option>
+      <option value="com.linkaja.app">LinkAja</option>
+
+      <!-- BANKING -->
+      <option value="com.bca.mybca.omni.android">myBCA</option>
+      <option value="com.bni.mobilebanking">BNI Mobile Banking</option>
+      <option value="com.bri.mobile">BRImo</option>
+      <option value="com.bankmandiri.mandirionline">Livin’ by Mandiri</option>
+      <option value="com.btn.mobile">BTN Mobile</option>
+      <option value="id.co.bri.brizzi">BRIZZI</option>
+
+      <!-- TELCO -->
+      <option value="com.indosat.im3">myIM3</option>
+      <option value="com.xlaxiata.mysmartfren">mySmartfren</option>
+      <option value="com.axis.net">AXISnet</option>
+      <option value="com.triindonesia.bima">Bima+</option>
+
+      <!-- SOCIAL / COMMUNICATION -->
+      <option value="com.whatsapp">WhatsApp</option>
+      <option value="com.instagram.android">Instagram</option>
+      <option value="com.facebook.katana">Facebook</option>
+      <option value="com.twitter.android">X (Twitter)</option>
+      <option value="com.telegram.messenger">Telegram</option>
+
+      <!-- GOVERNMENT / PUBLIC -->
+      <option value="id.go.kemenkeu.djp">DJP Online</option>
+      <option value="id.go.bpjs.mobile">Mobile JKN</option>
+      <option value="id.go.pedulilindungi">PeduliLindungi</option>
+
+      <!-- EDUCATION / UTILITY -->
+      <option value="com.ruangguru.student">Ruangguru</option>
+      <option value="com.zenius.mobile">Zenius</option>
+      <option value="com.duolingo">Duolingo</option>
+      <option value="com.google.android.gm">Gmail</option>
+    </datalist>
+
+
+
+      <input id="limit" type="number" placeholder="Jumlah Ulasan" />
+      <button id="analyzeBtn" onclick="analyze()">Analyze</button>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats fade-in">
+      <div class="card">
+        <h3>Positive</h3>
+        <span id="pos">0</span>
+      </div>
+      <div class="card">
+        <h3>Negative</h3>
+        <span id="neg">0</span>
+      </div>
+      <div class="card">
+        <h3>Neutral</h3>
+        <span id="neu">0</span>
+      </div>
+    </section>
+
+    <section class="charts fade-in">
+    <div class="panel">
+        <h3>Sentiment Distribution</h3>
+        <canvas id="sentimentChart"></canvas>
+    </div>
+
+    <div class="panel">
+        <h3>Rating Distribution</h3>
+        <canvas id="ratingChart" height="260"></canvas>
+
+    </div>
+    </section>
+
+
+    <!-- INSIGHT -->
+    <section class="charts fade-in">
+    <div class="panel">
+        <h3>Top Negative Keywords</h3>
+        <ul id="negKeywords" class="keyword-list">
+        <li class="muted">Belum ada data</li>
+        </ul>
+    </div>
+
+    <div class="panel">
+        <h3>Top Positive Keywords</h3>
+        <ul id="posKeywords" class="keyword-list">
+        <li class="muted">Belum ada data</li>
+        </ul>
+    </div>
+    </section>
+
+
+
+
+    <!-- SUMMARY -->
+    <section class="summary fade-in">
+      <h3>Summary</h3>
+      <p id="summaryText" class="muted">
+        Masukkan App ID dan jumlah review, lalu klik Analyze.
+      </p>
+    </section>
+  </section>
+
+    <section id="manual-page" style="display:none">
+
+    <header class="header">
+        <h1>Manual Sentiment Analysis</h1>
+        <p>Input teks & rating secara langsung</p>
+    </header>
+
+    <section class="panel fade-in">
+        <textarea id="manualText" rows="4"
+        placeholder="Masukkan kalimat..."></textarea>
+
+        <div class="manual-actions">
+        <input
+          id="manualRating"
+          type="number"
+          min="1"
+          max="5"
+          placeholder="Rating (1–5)"
+        />
+
+        <button class="btn-primary" onclick="analyzeManual()">
+          Analyze
+        </button>
+      </div>
+    </section>
+
+    <section class="panel fade-in">
+      <h3>Analysis Result</h3>
+
+      <div id="manualCard" class="result-card hidden">
+        <div class="result-header">
+          <span id="resultLabel" class="badge">Positive</span>
+          <span id="resultConfidence">0.00%</span>
+        </div>
+
+        <div class="confidence-bar">
+          <div id="confidenceFill"></div>
+        </div>
+
+        <div class="probabilities">
+          <div><span>Positive</span><span id="probPos">0.00</span></div>
+          <div><span>Neutral</span><span id="probNeu">0.00</span></div>
+          <div><span>Negative</span><span id="probNeg">0.00</span></div>
+        </div>
+
+        <div id="decisionBox" class="decision hidden">
+          <h4>Final Decision</h4>
+          <p id="finalSentiment"></p>
+          <small id="decisionReason"></small>
+        </div>
+      </div>
+
+      <p id="manualEmpty" class="muted">Belum ada analisis</p>
+    </section>
+
+
+    </section>
+
+  </main>
+</div>
+
+<script src="/ui/app.js"></script>
+</body>
+</html>
